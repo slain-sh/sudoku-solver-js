@@ -11,9 +11,14 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
     type="text/css">
   <!-- Main script -->
-  <script src="main.js"></script>
+  <script src="main.js" defer></script>
   <title>Sudoku Solver</title>
   <style>
+    :root {
+      --pico-spacing: 0px;
+      --pico-form-element-spacing-vertical: 0.5rem;
+      --pico-form-element-spacing-horizontal: 0.5rem;
+    }
     /* .grid-container {
             display: grid;
             grid-template-columns: 1fr 1.4fr;
@@ -21,16 +26,24 @@
             grid-column-gap: 0px;
             grid-row-gap: 0px;
         } */
+    tr > input {
+      /* all: unset; */
+      margin: 0px;
+      padding: 0px;
+    }
+
     table {
       margin: 1em auto;
     }
 
     td {
-      height: 30px;
-      width: 30px;
+      height: 40px;
+      width: 40px;
       border: 1px solid;
       text-align: center;
       border-color: #8891A4;
+      margin: 0px;
+      padding: 0px;
     }
 
     td:first-child {
@@ -58,7 +71,7 @@
 <body>
   <main class="container">
     <div class="row middle-xs">
-      <div class="col-sm col-lg-7">
+      <div class="col-sm-5 col-lg-5">
         <div class="box">
           <h1>Sudoku Solver</h1>
           <p>
@@ -66,15 +79,15 @@
             and a couple of tables in HTML.
           </p>
           <span>
-            <button>Generate</button>
+            <button autofocus="autofocus">Generate</button>
             <button>Solve</button>
           </span>
         </div>
       </div>
-      <div class="col-sm col-lg-4">
+      <div class="col-sm col-lg-5">
         <div class="box">
-          <table>
-            <tr>
+          <table id="gui">
+            <!-- <tr>
               <td> x </td>
               <td> x </td>
               <td> x </td>
@@ -172,7 +185,7 @@
               <td> x </td>
               <td> x </td>
               <td> x </td>
-            </tr>
+            </tr> -->
           </table>
         </div>
       </div>

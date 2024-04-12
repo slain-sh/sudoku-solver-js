@@ -15,7 +15,7 @@ function renderBoard() {
             input.row = r + 1;
             input.column = c + 1;
             input.square = getSquareNumber(input.row, input.column)
-            input.onkeydown = validate;
+            input.addEventListener("keydown", validate);
 
             // console.log("\nrow: " + r + "\ncolumn: " + c + "\nsquare: " + input.square)
             let cell = document.createElement("td");
@@ -27,6 +27,22 @@ function renderBoard() {
     }
 }
 
+function validate(event) {
+    // Allow tab, arrow keys, and backspace
+  if (event.key === "Tab" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "Backspace") {
+    return;
+  }
+  // Allow numerical digits
+  if (/^\d$/.test(event.key)) {
+    return;
+  }
+  // Prevent default action for all other keys
+  event.preventDefault();
+}
+
+function solveBoard() {
+    
+}
 
 function loadBoard() {
     clearBoard();
@@ -108,19 +124,19 @@ function loadBoard() {
 }
 
 
-function validate(evt) {
-    // this stops all non-numeric input
-    evt = (evt) ? evt : window.event;
-    var key = evt.keyCode || evt.which;
-    key = String.fromCharCode(key);
+// function validate(evt) {
+//     // this stops all non-numeric input
+//     evt = (evt) ? evt : window.event;
+//     var key = evt.keyCode || evt.which;
+//     key = String.fromCharCode(key);
 
-    // var regex = /^(\d|ArrowLeft|ArrowRight|ArrowUp|ArrowDown|Backspace)$/;
-    var regex = /^[\t0-9\]\[\s\b]+|(ArrowLeft|ArrowRight|ArrowUp|ArrowDown)$/;
-    if ( !regex.test(key) ) {
-        evt.returnValue = false;
-        if (evt.preventDefault) { evt.preventDefault(); }
-    }
-}
+//     // var regex = /^(\d|ArrowLeft|ArrowRight|ArrowUp|ArrowDown|Backspace)$/;
+//     var regex = /^[\t0-9\]\[\s\b]+|(ArrowLeft|ArrowRight|ArrowUp|ArrowDown)$/;
+//     if ( !regex.test(key) ) {
+//         evt.returnValue = false;
+//         if (evt.preventDefault) { evt.preventDefault(); }
+//     }
+// }
 
 
 function getSquareNumber(row, column) {
@@ -153,6 +169,7 @@ function getSquareNumber(row, column) {
         return 9;
     } 
 }
+
 
 function clearBoard() {
     for (let i of cells) {

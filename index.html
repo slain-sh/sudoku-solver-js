@@ -16,8 +16,8 @@
   <title>Sudoku Solver</title>
   <style>
     :root {
-      --pico-spacing: 0px;
-      --pico-form-element-spacing-vertical: 0.5rem;
+      /* --pico-spacing: 0px; */
+      /* --pico-form-element-spacing-vertical: 0.5rem; */
       --pico-form-element-spacing-horizontal: 0.5rem;
     }
     table {
@@ -44,6 +44,7 @@
     }
 
     input[type="text"] {
+      border-radius: 0px;
       text-align: center;
       font-size: 1.5em;
     }
@@ -80,8 +81,9 @@
         <div class="box">
           <h1>Sudoku Solver</h1>
           <p>
-            This is a simple sudoku solver using a backtracking algorithm with JS
-            and a couple of tables in HTML.
+            This is a simple sudoku solver that implements a backtracking algorithm
+            using JavaScript. The frontend is made with HTML tables, Pico CSS, and
+            Flexbox Grid.
           </p>
           <span>
             <button autofocus="autofocus">Generate</button>
@@ -92,105 +94,6 @@
       <div class="col-md-8 col-lg-6">
         <div class="box">
           <table id="gui">
-            <!-- <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr>
-            <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr>
-            <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr>
-            <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr>
-            <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr>
-            <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr>
-            <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr>
-            <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr>
-            <tr>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-              <td> x </td>
-            </tr> -->
           </table>
         </div>
       </div>

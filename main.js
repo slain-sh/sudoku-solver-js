@@ -117,8 +117,27 @@ function renderBoard() {
     }
 }
 
-function solveBoard() {
+function solveBoard(grid, row = 0, col = 0) {
+    // If row index equals the number of rows (9), stop recursion
+    if (row === grid.length) { return true; }
+
+    let current_square = getSquareNumber(row, col);
+    console.log(current_square);
+    let subgrid_cells = [].concat(...grid)
+    subgrid_cells = subgrid_cells.filter(obj => obj.firstChild.square === current_square);
+    console.log(subgrid_cells);
     
+    // console.log("Element at [" + row + "][" + col + "]:", grid[row][col]);
+    let nextCol = col + 1;
+    let nextRow = row;
+
+    if (nextCol === grid[row].length) {
+        // Move to next row, reset col to 0
+        nextRow = row + 1;
+        nextCol = 0;
+    }
+
+    solveBoard(grid, nextRow, nextCol);
 }
 
 function validate(event) {
@@ -177,3 +196,4 @@ function clearBoard() {
 }
 renderBoard();
 console.log(cells);
+// solveBoard(cells);

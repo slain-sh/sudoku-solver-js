@@ -6,7 +6,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark" />
   <!-- pico CSS -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" />
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" /> -->
+  <link rel="stylesheet" href="css/pico.min.css">
   <!-- Flexbox -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
     type="text/css">
@@ -19,21 +20,9 @@
       --pico-form-element-spacing-vertical: 0.5rem;
       --pico-form-element-spacing-horizontal: 0.5rem;
     }
-    /* .grid-container {
-            display: grid;
-            grid-template-columns: 1fr 1.4fr;
-            grid-template-rows: 1fr;
-            grid-column-gap: 0px;
-            grid-row-gap: 0px;
-        } */
-    tr > input {
-      /* all: unset; */
-      margin: 0px;
-      padding: 0px;
-    }
-
     table {
       margin: 1em auto;
+      width: 0px;
     }
 
     td {
@@ -44,6 +33,19 @@
       border-color: #8891A4;
       margin: 0px;
       padding: 0px;
+    }
+
+    td > input[type="text"], td {
+      /* all: unset; */
+      margin: 0px;
+      padding: 0px;
+      width: 50px;
+      height: 50px;
+    }
+
+    input[type="text"] {
+      text-align: center;
+      font-size: 1.5em;
     }
 
     td:first-child {
@@ -65,13 +67,16 @@
       border-bottom: solid;
       border-color: #8891A4;
     }
+    /* h1 {
+      margin-top: 2rem;
+    } */
   </style>
 </head>
 
 <body>
   <main class="container">
     <div class="row middle-xs">
-      <div class="col-sm-5 col-lg-5">
+      <div class="col-md col-lg">
         <div class="box">
           <h1>Sudoku Solver</h1>
           <p>
@@ -84,7 +89,7 @@
           </span>
         </div>
       </div>
-      <div class="col-sm col-lg-5">
+      <div class="col-md-8 col-lg-6">
         <div class="box">
           <table id="gui">
             <!-- <tr>

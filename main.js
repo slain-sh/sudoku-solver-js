@@ -3,47 +3,6 @@
 // Array with all cells 0-80
 let cells = [];
 
-function renderBoard() {
-    const table = document.getElementById("gui");
-
-    for (let r = 0; r < 9; r++) {
-        let row = document.createElement("tr");
-        for (let c = 0; c < 9; c++) {
-            let input = document.createElement("input");
-            input.type = "text";
-            input.maxLength = 1;
-            input.row = r + 1;
-            input.column = c + 1;
-            input.square = getSquareNumber(input.row, input.column)
-            input.addEventListener("keydown", validate);
-
-            // console.log("\nrow: " + r + "\ncolumn: " + c + "\nsquare: " + input.square)
-            let cell = document.createElement("td");
-            cell.appendChild(input);
-            row.appendChild(cell);
-            cells.push(cell);
-        }
-        table.appendChild(row);
-    }
-}
-
-function validate(event) {
-    // Allow tab, arrow keys, and backspace
-  if (event.key === "Tab" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "Backspace") {
-    return;
-  }
-  // Allow numerical digits
-  if (/^\d$/.test(event.key)) {
-    return;
-  }
-  // Prevent default action for all other keys
-  event.preventDefault();
-}
-
-function solveBoard() {
-    
-}
-
 function loadBoard() {
     clearBoard();
     let sudoku1 =  [[0,0,0,2,6,0,7,0,1],
@@ -114,57 +73,94 @@ function loadBoard() {
         break;
     }
 
-    randomBoard = [].concat(...randomBoard);
+    randomBoard.map(function(v, i, a) {
+        // console.log(v);
+        v.map(function(e, j, a) {
+            if (e !== 0) {
+                cells[i][j].firstChild.value = e;
+            }
+        });
+    });
 
-    for (let i = 0; i < randomBoard.length; i++) {
-        if (randomBoard[i] != 0) {
-            cells[i].firstElementChild.value = randomBoard[i];
+    // randomBoard = [].concat(...randomBoard);
+
+    // for (let i = 0; i < randomBoard.length; i++) {
+    //     if (randomBoard[i] != 0) {
+    //         cells[i].firstElementChild.value = randomBoard[i];
+    //     }
+    // }
+}
+
+function renderBoard() {
+    const table = document.getElementById("gui");
+
+    for (let r = 0; r < 9; r++) {
+        let row = document.createElement("tr");
+        let row_cells = [];
+        for (let c = 0; c < 9; c++) {
+            let input = document.createElement("input");
+            input.type = "text";
+            input.maxLength = 1;
+            input.row = r;
+            input.column = c;
+            input.square = getSquareNumber(input.row, input.column)
+            input.addEventListener("keydown", validate);
+
+            // console.log("\nrow: " + r + "\ncolumn: " + c + "\nsquare: " + input.square)
+            let cell = document.createElement("td");
+            cell.appendChild(input);
+            row.appendChild(cell);
+            row_cells.push(cell)
         }
+        cells.push(row_cells);
+        table.appendChild(row);
     }
 }
 
+function solveBoard() {
+    
+}
 
-// function validate(evt) {
-//     // this stops all non-numeric input
-//     evt = (evt) ? evt : window.event;
-//     var key = evt.keyCode || evt.which;
-//     key = String.fromCharCode(key);
-
-//     // var regex = /^(\d|ArrowLeft|ArrowRight|ArrowUp|ArrowDown|Backspace)$/;
-//     var regex = /^[\t0-9\]\[\s\b]+|(ArrowLeft|ArrowRight|ArrowUp|ArrowDown)$/;
-//     if ( !regex.test(key) ) {
-//         evt.returnValue = false;
-//         if (evt.preventDefault) { evt.preventDefault(); }
-//     }
-// }
+function validate(event) {
+    // Allow tab, arrow keys, and backspace
+  if (event.key === "Tab" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "Backspace") {
+    return;
+  }
+  // Allow numerical digits
+  if (/^\d$/.test(event.key)) {
+    return;
+  }
+  // Prevent default action for all other keys
+  event.preventDefault();
+}
 
 
 function getSquareNumber(row, column) {
     // offset column and row by 1, so they don't start at 0
-    // column++;
-    // row++;
+    column++;
+    row++;
 
     // 1st row
     if (column <= 3 && row <= 3) {
-        return 1;
+        return 0;
     } else if ((column >= 4 && column <= 6) && row <= 3) {
-        return 2;
+        return 1;
     } else if ((column >= 7 && column <= 9) && row <= 3) {
-        return 3;
+        return 2;
     }
     // 2nd row
     else if ((row >= 4 && row <= 6) && column <= 3) {
-        return 4;
+        return 3;
     } else if ((row >= 4 && row <= 6) && (column >= 4 && column <= 6)) {
-        return 5;
+        return 4;
     } else if ((row >= 4 && row <= 6) && (column >= 7 && column <= 9)) {
-        return 6;
+        return 5;
     }
     // 3rd row
      else if ((row >= 7 && row <= 9) && column <= 3) {
-        return 7;
+        return 6;
     } else if ((row >= 7 && row <= 9) && (column >= 4 && column <= 6)) {
-        return 8;
+        return 7;
     } else if ((row >= 7 && row <= 9) && (column >= 7 && column <= 9)) {
         return 9;
     } 
@@ -172,11 +168,12 @@ function getSquareNumber(row, column) {
 
 
 function clearBoard() {
-    for (let i of cells) {
-        // console.log(i.firstElementChild);
-        i.firstElementChild.value = "";
+    for (let r = 0; r < cells.length; r++) {
+        for (let c = 0; c < cells[r].length; c++) {
+            cells[r][c].firstChild.value = "";
+            // console.log(cells[r][c]);
+        }
     }
 }
-
 renderBoard();
 console.log(cells);

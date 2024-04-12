@@ -3,7 +3,7 @@
 // Array with all cells 0-80
 let cells = [];
 
-function renderTable() {
+function renderBoard() {
     const table = document.getElementById("gui");
 
     for (let r = 0; r < 9; r++) {
@@ -12,12 +12,11 @@ function renderTable() {
             let input = document.createElement("input");
             input.type = "text";
             input.maxLength = 1;
-            input.row = r;
-            input.column = c;
-            input.square = getSquareNumber(r, c)
+            input.row = r + 1;
+            input.column = c + 1;
+            input.square = getSquareNumber(input.row, input.column)
 
-            console.log("\nrow: " + r + "\ncolumn: " + c + "\nsquare: " + input.square)
-
+            // console.log("\nrow: " + r + "\ncolumn: " + c + "\nsquare: " + input.square)
             let cell = document.createElement("td");
             cell.appendChild(input);
             row.appendChild(cell);
@@ -29,8 +28,8 @@ function renderTable() {
 
 function getSquareNumber(row, column) {
     // offset column and row by 1, so they don't start at 0
-    column++;
-    row++;
+    // column++;
+    // row++;
 
     // 1st row
     if (column <= 3 && row <= 3) {
@@ -58,5 +57,12 @@ function getSquareNumber(row, column) {
     } 
 }
 
-renderTable();
+function clearBoard() {
+    for (let i of cells) {
+        // console.log(i.firstElementChild);
+        i.firstElementChild.value = "";
+    }
+}
+
+renderBoard();
 console.log(cells);

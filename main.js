@@ -27,13 +27,95 @@ function renderBoard() {
     }
 }
 
+
+function loadBoard() {
+    clearBoard();
+    let sudoku1 =  [[0,0,0,2,6,0,7,0,1],
+                    [6,8,0,0,7,0,0,9,0],
+                    [1,9,0,0,0,4,5,0,0],
+                    [8,2,0,1,0,0,0,4,0],
+                    [0,0,4,6,0,2,9,0,0],
+                    [0,5,0,0,0,3,0,2,8],
+                    [0,0,9,3,0,0,0,7,4],
+                    [0,4,0,0,5,0,0,3,6],
+                    [7,0,3,0,1,8,0,0,0]
+    ];
+    
+    let sudoku2 = [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
+    ];
+    
+    let sudoku3 = [
+        [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 3, 0, 8, 5],
+        [0, 0, 1, 0, 2, 0, 0, 0, 0],
+        [0, 0, 0, 5, 0, 7, 0, 0, 0],
+        [0, 0, 4, 0, 0, 0, 1, 0, 0],
+        [0, 9, 0, 0, 0, 0, 0, 0, 0],
+        [5, 0, 0, 0, 0, 0, 0, 7, 3],
+        [0, 0, 2, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 4, 0, 0, 0, 9]
+    ];
+
+    let sudoku4 = [
+        [8, 0, 0, 0, 0, 0, 0, 0, 0],
+        [0, 0, 3, 6, 0, 0, 0, 0, 0],
+        [0, 7, 0, 0, 9, 0, 2, 0, 0],
+        [0, 5, 0, 0, 0, 7, 0, 0, 0],
+        [0, 0, 0, 0, 4, 5, 7, 0, 0],
+        [0, 0, 0, 1, 0, 0, 0, 3, 0],
+        [0, 0, 1, 0, 0, 0, 0, 6, 8],
+        [0, 0, 8, 5, 0, 0, 0, 1, 0],
+        [0, 9, 0, 0, 0, 0, 4, 0, 0]
+      ];
+      
+
+    // Generate a random number between 1 and 3 (inclusive)
+    let randomNumber = Math.floor(Math.random() * 4) + 1;
+    let randomBoard;
+
+    // Switch statement based on the random number
+    switch (randomNumber) {
+    case 1:
+        randomBoard = sudoku1
+        break;
+    case 2:
+        randomBoard = sudoku2
+        break;
+    case 3:
+        randomBoard = sudoku3
+        break;
+    case 4:
+        randomBoard = sudoku4
+        break;
+    }
+
+    randomBoard = [].concat(...randomBoard);
+
+    for (let i = 0; i < randomBoard.length; i++) {
+        if (randomBoard[i] != 0) {
+            cells[i].firstElementChild.value = randomBoard[i];
+        }
+    }
+}
+
+
 function validate(evt) {
     // this stops all non-numeric input
     evt = (evt) ? evt : window.event;
     var key = evt.keyCode || evt.which;
     key = String.fromCharCode(key);
 
-    var regex = /[0-9]|\./;
+    // var regex = /^(\d|ArrowLeft|ArrowRight|ArrowUp|ArrowDown|Backspace)$/;
+    var regex = /^[\t0-9\]\[\s\b]+|(ArrowLeft|ArrowRight|ArrowUp|ArrowDown)$/;
     if ( !regex.test(key) ) {
         evt.returnValue = false;
         if (evt.preventDefault) { evt.preventDefault(); }

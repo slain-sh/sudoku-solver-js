@@ -15,6 +15,7 @@ function renderBoard() {
             input.row = r + 1;
             input.column = c + 1;
             input.square = getSquareNumber(input.row, input.column)
+            input.onkeydown = validate;
 
             // console.log("\nrow: " + r + "\ncolumn: " + c + "\nsquare: " + input.square)
             let cell = document.createElement("td");
@@ -25,6 +26,20 @@ function renderBoard() {
         table.appendChild(row);
     }
 }
+
+function validate(evt) {
+    // this stops all non-numeric input
+    evt = (evt) ? evt : window.event;
+    var key = evt.keyCode || evt.which;
+    key = String.fromCharCode(key);
+
+    var regex = /[0-9]|\./;
+    if ( !regex.test(key) ) {
+        evt.returnValue = false;
+        if (evt.preventDefault) { evt.preventDefault(); }
+    }
+}
+
 
 function getSquareNumber(row, column) {
     // offset column and row by 1, so they don't start at 0

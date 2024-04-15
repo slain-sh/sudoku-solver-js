@@ -153,6 +153,7 @@ let direction = 1;
 // 2. Check if 1 will break board. If it breaks, increment up to 9 until board wont break
 // 3. If num reaches 9 but still breaks board, backtrack and increment.
 function solveBoard(grid, row = 0, col = 0) {
+    // direction = 1;
     // console.log("Element at [" + row + "][" + col + "]:", grid[row][col]);
     // If row index equals the number of rows (9), stop recursion
     if (row === grid.length) { return true; }
@@ -163,110 +164,70 @@ function solveBoard(grid, row = 0, col = 0) {
     subgrid_cells = subgrid_cells.filter(obj => obj.firstChild.square === current_square);
     subgrid_cells = Array.from(subgrid_cells).map(parent => parent.firstChild);
 
+    // console.log("row: " + row + "\ncol: " + col);
     let input = grid[row][col].firstChild;
-    let num = input.value === "" ? 0 : input.value -1;
-
-    let hasBrokenBoard = false;
-
-    do {
-        num++;
-
-        subgrid_cells.map(function(cell) {
-            if (Number(cell.value) === num) {
-                hasBrokenBoard = true;
-            }
-        });
-
-        for (let c = 0; c < grid[row].length; c++) {
-            if (c != col) {
-                if (Number(grid[row][c].firstChild.value) === num) {
-                    hasBrokenBoard = true;
-                }
-            }
-        }
-        for (let r = 0; r < grid.length; r++) {
-            if (r != row) {
-                if (Number(grid[r][col].firstChild.value) === num) {
-                    hasBrokenBoard = true;
-                }
-            }
-        }
-        if (hasBrokenBoard === false) {
-            break;
-        }
-
-    } while (num < 9);
-
-    // do {
-    //     hasBrokenBoard = false;
-    //     num++;
-
-    //     if (subgrid_cells.includes(num)) {
-    //         hasBrokenBoard = true;
-    //     }
-    //     for (let c = 0; c < grid[row].length; c++) {
-    //         if (c != col) {
-    //             if (grid[row][c] === num) {
-    //                 hasBrokenBoard = true;
-    //             }
-    //         }
-    //     }
-    //     for (let r = 0; r < grid.length; r++) {
-    //         if (r != row) {
-    //             if (grid[r][col] === num) {
-    //                 hasBrokenBoard = true;
-    //             }
-    //         }
-    //     }
-
-    //     if (num === 9 && hasBrokenBoard === true) {
-    //         direction = -1;
-    //         hasBrokenBoard = false;
-    //     }
-    // } while (hasBrokenBoard === true);
-
+    let num = input.value === "" ? 1 : input.value;
     if (input.unassigned === true) {
-        input.value = num;
-    }
-    
-    // for (let i = 1; i <= 9; i++) {
-    //     let input = grid[row][col].firstChild;
-        
-    //     if (subgrid_cells.includes(i)) {
-    //         hasBrokenBoard = true;
-    //     }
-    //     for (let c = 0; c < grid[row].length; c++) {
-    //         if (grid[row][c] === i && c != col) {
-    //             hasBrokenBoard = true;
-    //         }
-    //     }
-    //     for (let r = 0; r < grid.length; r++) {
-    //         if (grid[r][col] === i && r != row) {
-    //             hasBrokenBoard = true;
-    //         }
-    //     }
+        // let hasBrokenBoard = false;
+        let hasBrokenBoard;
 
-    //     if (hasBrokenBoard === false) {
-    //         direction = 1;
-    //     }
-    // }
+        do {
+            hasBrokenBoard = false;
+
+            subgrid_cells.map(function(cell) {
+                if (Number(cell.value) === num) {
+                    hasBrokenBoard = true;
+                }
+            });
+
+            for (let c = 0; c < grid[row].length; c++) {
+                if (c != col) {
+                    if (Number(grid[row][c].firstChild.value) === num) {
+                        hasBrokenBoard = true;
+                    }
+                }
+            }
+            for (let r = 0; r < grid.length; r++) {
+                if (r != row) {
+                    if (Number(grid[r][col].firstChild.value) === num) {
+                        hasBrokenBoard = true;
+                    }
+                }
+            }
+
+            if (hasBrokenBoard === false) {
+                direction = 1;
+                input.value = num;
+                break;
+            } else if (hasBrokenBoard === true) {
+                if (num < 9) {
+                    num++;
+                }
+                else {
+                    direction = -1;
+                }
+            }
+        } while (num < 9);
+    }
     
     let nextCol = col + (1 * direction);
     let nextRow = row;
-
-    if (direction > 0) {
-        if (nextCol === grid[row].length) {
-            // Move to next row, reset col to 0
-            nextRow = row + 1;
+    if (nextCol === grid[row].length) {
+        // Move to next row, reset col to 0
+        nextRow = row + 1;
+        nextCol = 0;
+    } else if (nextCol < 0) {
+        if (nextRow === 0) {
+            nextRow = 0;
             nextCol = 0;
-        }
-    } else if (direction < 0 && row > 0) {
-        if (nextCol < 0) {
-            nextRow = row - 1;
-            nextCol = grid[row].length - 1;
+        } else {
+            nextRow = nextRow - 1;
+            nextCol = grid[nextRow].length - 1;
         }
     }
 
+    console.log(String(row + "\n" + col))
+    // console.log(String(nextRow + "\n" + nextCol))
     // Recursion go brr
     solveBoard(grid, nextRow, nextCol);
 }

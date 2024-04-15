@@ -93,6 +93,28 @@ function loadBoard() {
     // }
 }
 
+function setUnassigned(input) {
+    // Check if input value is empty
+    if (input.value.trim() === "" || input.value.trim() == 0) {
+        input.unassigned = true;
+    } else {
+        input.unassigned = false;
+    }
+}
+
+function validate(event) {
+    // Allow tab, arrow keys, and backspace
+  if (event.key === "Tab" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "Backspace") {
+    return;
+  }
+  // Allow numerical digits
+  if (/^\d$/.test(event.key)) {
+    return;
+  }
+  // Prevent default action for all other keys
+  event.preventDefault();
+}
+
 function renderBoard() {
     const table = document.getElementById("gui");
 
@@ -108,6 +130,9 @@ function renderBoard() {
             input.square = getSquareNumber(input.row, input.column);
             input.unassigned = true;
             input.addEventListener("keydown", validate);
+            input.addEventListener("input", function() {
+                setUnassigned(input);
+            })
 
             // console.log("\nrow: " + r + "\ncolumn: " + c + "\nsquare: " + input.square)
             let cell = document.createElement("td");
@@ -123,15 +148,109 @@ function renderBoard() {
 // 1 is forward, -1 is back
 let direction = 1;
 
+/* !!! The actual recursive function !!! */
+// 1. Check if unassigned. Skip and traverse grid if already assigned
+// 2. Check if 1 will break board. If it breaks, increment up to 9 until board wont break
+// 3. If num reaches 9 but still breaks board, backtrack and increment.
 function solveBoard(grid, row = 0, col = 0) {
+    // console.log("Element at [" + row + "][" + col + "]:", grid[row][col]);
     // If row index equals the number of rows (9), stop recursion
     if (row === grid.length) { return true; }
+
 
     let current_square = getSquareNumber(row, col);
     let subgrid_cells = [].concat(...grid)
     subgrid_cells = subgrid_cells.filter(obj => obj.firstChild.square === current_square);
+    subgrid_cells = Array.from(subgrid_cells).map(parent => parent.firstChild);
+
+    let input = grid[row][col].firstChild;
+    let num = input.value === "" ? 0 : input.value -1;
+
+    let hasBrokenBoard = false;
+
+    do {
+        num++;
+
+        subgrid_cells.map(function(cell) {
+            if (Number(cell.value) === num) {
+                hasBrokenBoard = true;
+            }
+        });
+
+        for (let c = 0; c < grid[row].length; c++) {
+            if (c != col) {
+                if (Number(grid[row][c].firstChild.value) === num) {
+                    hasBrokenBoard = true;
+                }
+            }
+        }
+        for (let r = 0; r < grid.length; r++) {
+            if (r != row) {
+                if (Number(grid[r][col].firstChild.value) === num) {
+                    hasBrokenBoard = true;
+                }
+            }
+        }
+        if (hasBrokenBoard === false) {
+            break;
+        }
+
+    } while (num < 9);
+
+    // do {
+    //     hasBrokenBoard = false;
+    //     num++;
+
+    //     if (subgrid_cells.includes(num)) {
+    //         hasBrokenBoard = true;
+    //     }
+    //     for (let c = 0; c < grid[row].length; c++) {
+    //         if (c != col) {
+    //             if (grid[row][c] === num) {
+    //                 hasBrokenBoard = true;
+    //             }
+    //         }
+    //     }
+    //     for (let r = 0; r < grid.length; r++) {
+    //         if (r != row) {
+    //             if (grid[r][col] === num) {
+    //                 hasBrokenBoard = true;
+    //             }
+    //         }
+    //     }
+
+    //     if (num === 9 && hasBrokenBoard === true) {
+    //         direction = -1;
+    //         hasBrokenBoard = false;
+    //     }
+    // } while (hasBrokenBoard === true);
+
+    if (input.unassigned === true) {
+        input.value = num;
+    }
     
-    // console.log("Element at [" + row + "][" + col + "]:", grid[row][col]);
+    // for (let i = 1; i <= 9; i++) {
+    //     let input = grid[row][col].firstChild;
+        
+    //     if (subgrid_cells.includes(i)) {
+    //         hasBrokenBoard = true;
+    //     }
+    //     for (let c = 0; c < grid[row].length; c++) {
+    //         if (grid[row][c] === i && c != col) {
+    //             hasBrokenBoard = true;
+    //         }
+    //     }
+    //     for (let r = 0; r < grid.length; r++) {
+    //         if (grid[r][col] === i && r != row) {
+    //             hasBrokenBoard = true;
+    //         }
+    //     }
+
+    //     if (hasBrokenBoard === false) {
+    //         direction = 1;
+    //     }
+    // }
+    
     let nextCol = col + (1 * direction);
     let nextRow = row;
 
@@ -148,20 +267,8 @@ function solveBoard(grid, row = 0, col = 0) {
         }
     }
 
+    // Recursion go brr
     solveBoard(grid, nextRow, nextCol);
-}
-
-function validate(event) {
-    // Allow tab, arrow keys, and backspace
-  if (event.key === "Tab" || event.key === "ArrowLeft" || event.key === "ArrowRight" || event.key === "ArrowUp" || event.key === "ArrowDown" || event.key === "Backspace") {
-    return;
-  }
-  // Allow numerical digits
-  if (/^\d$/.test(event.key)) {
-    return;
-  }
-  // Prevent default action for all other keys
-  event.preventDefault();
 }
 
 
@@ -207,6 +314,8 @@ function clearBoard() {
         }
     }
 }
+
+
 renderBoard();
 console.log(cells);
 // solveBoard(cells);

@@ -145,15 +145,12 @@ function renderBoard() {
     }
 }
 
-// 1 is forward, -1 is back
-let direction = 1;
-
 /* !!! The actual recursive function !!! */
 // 1. Check if unassigned. Skip and traverse grid if already assigned
 // 2. Check if 1 will break board. If it breaks, increment up to 9 until board wont break
 // 3. If num reaches 9 but still breaks board, backtrack and increment.
-function solveBoard(grid, row = 0, col = 0) {
-    // direction = 1;
+function solveBoard(grid, row = 0, col = 0, direction = 1) {
+    let current_direction = direction;
     // console.log("Element at [" + row + "][" + col + "]:", grid[row][col]);
     // If row index equals the number of rows (9), stop recursion
     if (row === grid.length) { return true; }
@@ -166,10 +163,9 @@ function solveBoard(grid, row = 0, col = 0) {
 
     // console.log("row: " + row + "\ncol: " + col);
     let input = grid[row][col].firstChild;
-    let num = input.value === "" ? 1 : input.value;
+    let num = input.value === "" || input.value === 0 ? 1 : input.value;
+    let hasBrokenBoard;
     if (input.unassigned === true) {
-        // let hasBrokenBoard = false;
-        let hasBrokenBoard;
 
         do {
             hasBrokenBoard = false;
@@ -196,7 +192,8 @@ function solveBoard(grid, row = 0, col = 0) {
             }
 
             if (hasBrokenBoard === false) {
-                direction = 1;
+                console.log("Placing " + num + "\nRow: " + row + "\nCol: " + col);
+                // direction = 1;
                 input.value = num;
                 break;
             } else if (hasBrokenBoard === true) {
@@ -204,13 +201,23 @@ function solveBoard(grid, row = 0, col = 0) {
                     num++;
                 }
                 else {
-                    direction = -1;
+                    // direction = -1;
+                    break;
                 }
             }
-        } while (num < 9);
+        } while (num < 10);
     }
+
+
+    if (hasBrokenBoard === true) {
+        current_direction = -1;
+    } else if (hasBrokenBoard === false) {
+        current_direction = 1;
+    }
+
+    console.log(current_direction);
     
-    let nextCol = col + (1 * direction);
+    let nextCol = col + (1 * current_direction);
     let nextRow = row;
     if (nextCol === grid[row].length) {
         // Move to next row, reset col to 0
@@ -226,10 +233,10 @@ function solveBoard(grid, row = 0, col = 0) {
         }
     }
 
-    console.log(String(row + "\n" + col))
-    // console.log(String(nextRow + "\n" + nextCol))
+    // console.log(String(row + "\n" + col))
+    console.log(String(nextRow + "\n" + nextCol))
     // Recursion go brr
-    solveBoard(grid, nextRow, nextCol);
+    solveBoard(grid, nextRow, nextCol, current_direction);
 }
 
 

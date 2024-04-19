@@ -77,7 +77,7 @@ function loadBoard() {
         // console.log(v);
         v.map(function(e, j, a) {
             if (e !== 0) {
-                let input = cells[i][j].firstChild
+                let input = cells[i][j]
                 input.value = e;
                 input.unassigned = false;
             }
@@ -138,107 +138,12 @@ function renderBoard() {
             let cell = document.createElement("td");
             cell.appendChild(input);
             row.appendChild(cell);
-            row_cells.push(cell)
+            row_cells.push(input)
         }
         cells.push(row_cells);
         table.appendChild(row);
     }
 }
-
-/* !!! The actual recursive function !!! */
-// 1. Check if unassigned. Skip and traverse grid if already assigned
-// 2. Check if 1 will break board. If it breaks, increment up to 9 until board wont break
-// 3. If num reaches 9 but still breaks board, backtrack and increment.
-function solveBoard(grid, row = 0, col = 0, direction = 1) {
-    let current_direction = direction;
-    // console.log("Element at [" + row + "][" + col + "]:", grid[row][col]);
-    // If row index equals the number of rows (9), stop recursion
-    if (row === grid.length) { return true; }
-
-
-    let current_square = getSquareNumber(row, col);
-    let subgrid_cells = [].concat(...grid)
-    subgrid_cells = subgrid_cells.filter(obj => obj.firstChild.square === current_square);
-    subgrid_cells = Array.from(subgrid_cells).map(parent => parent.firstChild);
-
-    // console.log("row: " + row + "\ncol: " + col);
-    let input = grid[row][col].firstChild;
-    let num = input.value === "" || input.value === 0 ? 1 : input.value;
-    let hasBrokenBoard;
-    if (input.unassigned === true) {
-
-        do {
-            hasBrokenBoard = false;
-
-            subgrid_cells.map(function(cell) {
-                if (Number(cell.value) === num) {
-                    hasBrokenBoard = true;
-                }
-            });
-
-            for (let c = 0; c < grid[row].length; c++) {
-                if (c != col) {
-                    if (Number(grid[row][c].firstChild.value) === num) {
-                        hasBrokenBoard = true;
-                    }
-                }
-            }
-            for (let r = 0; r < grid.length; r++) {
-                if (r != row) {
-                    if (Number(grid[r][col].firstChild.value) === num) {
-                        hasBrokenBoard = true;
-                    }
-                }
-            }
-
-            if (hasBrokenBoard === false) {
-                console.log("Placing " + num + "\nRow: " + row + "\nCol: " + col);
-                // direction = 1;
-                input.value = num;
-                break;
-            } else if (hasBrokenBoard === true) {
-                if (num < 9) {
-                    num++;
-                }
-                else {
-                    // direction = -1;
-                    break;
-                }
-            }
-        } while (num < 10);
-    }
-
-
-    if (hasBrokenBoard === true) {
-        current_direction = -1;
-    } else if (hasBrokenBoard === false) {
-        current_direction = 1;
-    }
-
-    console.log(current_direction);
-    
-    let nextCol = col + (1 * current_direction);
-    let nextRow = row;
-    if (nextCol === grid[row].length) {
-        // Move to next row, reset col to 0
-        nextRow = row + 1;
-        nextCol = 0;
-    } else if (nextCol < 0) {
-        if (nextRow === 0) {
-            nextRow = 0;
-            nextCol = 0;
-        } else {
-            nextRow = nextRow - 1;
-            nextCol = grid[nextRow].length - 1;
-        }
-    }
-
-    // console.log(String(row + "\n" + col))
-    console.log(String(nextRow + "\n" + nextCol))
-    // Recursion go brr
-    solveBoard(grid, nextRow, nextCol, current_direction);
-}
-
 
 function getSquareNumber(row, column) {
     // offset column and row by 1, so they don't start at 0
@@ -271,17 +176,97 @@ function getSquareNumber(row, column) {
     } 
 }
 
+/* !!! The actual recursive function !!! */
+// 1. Check if unassigned. Skip and traverse grid if already assigned
+// 2. Check if 1 will break board. If it breaks, increment up to 9 until board wont break
+// 3. If num reaches 9 but still breaks board, backtrack and increment.
+function solveBoard(grid, r=0, c=0) {
+    // We've solved the board!
+    if (r === 9) {
+        return true;
+    } else if (c === 9) {
+        // console.log("Moving to next row")
+        return solveBoard(grid, r+1, 0);
+    } else if (grid[r][c].unassigned === false) {
+        // console.log("Next column")
+        return solveBoard(grid, r, c+1);
+    } else {
+        for (let v = 1; v < 10; v++) {
+            if (isValid(grid, r, c, v)) {
+                console.log(v + " is valid")
+                grid[r][c].value = String(v);
+                if (solveBoard(grid, r, c+1) === true) {
+                    return true;
+                }
+                // console.log("Override with empty");
+                grid[r][c].value = "";
+            }
+        }
+        return false;
+    }
+}
+
+
+function isValid(grid, r, c, value) {
+    // let valid = false;
+    // let notInRow = !grid[r].some(input => Number(input.value) === value);
+    // let notInColumn = !Array.from({ length: 9 }, (_, i) => grid[i][c]).some(input => Number(input.value) === value)
+
+    // let currentSquare = getSquareNumber(r, c);
+    // let subgridCells = [].concat(...grid).filter(input => input.square === currentSquare);
+    // // console.log(subgridCells);
+    // let notInSubgrid = !subgridCells.some(cell => cell.square === value);
+
+    // if (notInRow && notInColumn && notInSubgrid) { valid = true}
+
+    // return valid;
+
+    // if (Array.from(grid[r]).map(input => Number(input.value)).includes(value)) {
+    //     return false;
+    // } 
+    // console.log(grid.map(row => row[c]).map(input => Number(input.value)));
+    // if (grid.map(row => row[c]).map(input => Number(input.value)).includes(value)) {
+    //     return false;
+    // }
+
+    // let currentSquare = getSquareNumber(r, c);
+    // let subgridCells = [].concat(...grid).filter(input => input.square === currentSquare);
+    // if (subgridCells.some(cell => cell.square === value)) {
+    //     return false;
+    // }
+    for (let i = 0; i < grid[r].length; i++) {
+        if (Number(grid[r][i].value) === value && i != c) {
+            console.log(value + " already in row");
+            return false;
+        }
+    }
+    for (let j = 0; j < grid.length; j++) {
+        if (Number(grid[j][c].value) === value && j != r) {
+            console.log(value + " already in column");
+            return false;
+        }
+    }
+    let currentSquare = getSquareNumber(r, c);
+    let subgridCells = [].concat(...grid).filter(input => input.square === currentSquare);
+    if (subgridCells.some(cell => cell.value === value)) {
+        console.log(value + " already in subgrid");
+        return false;
+    }
+
+    return true;
+}
 
 function clearBoard() {
     for (let r = 0; r < cells.length; r++) {
         for (let c = 0; c < cells[r].length; c++) {
-            let input = cells[r][c].firstChild;
+            let input = cells[r][c];
             input.value = "";
             input.unassigned = true;
             // console.log(cells[r][c]);
         }
     }
 }
+
 
 
 renderBoard();

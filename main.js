@@ -176,16 +176,12 @@ function getSquareNumber(row, column) {
     } 
 }
 
-/* !!! The actual recursive function !!! */
-// 1. Check if unassigned. Skip and traverse grid if already assigned
-// 2. Check if 1 will break board. If it breaks, increment up to 9 until board wont break
-// 3. If num reaches 9 but still breaks board, backtrack and increment.
-function solveBoard(grid, r=0, c=0) {
-    // We've solved the board!
+function solveBoard(grid, r = 0, c = 0) {
+    // Base case: We've solved the board!
     if (r === 9) {
         return true;
+    // We've hit the end of the column, move to next row
     } else if (c === 9) {
-        // console.log("Moving to next row")
         return solveBoard(grid, r+1, 0);
     } else if (grid[r][c].unassigned === false) {
         // console.log("Next column")
@@ -248,9 +244,10 @@ function isValid(grid, r, c, value) {
     }
     let currentSquare = getSquareNumber(r, c);
     let subgridCells = [].concat(...grid).filter(input => input.square === currentSquare);
-    if (subgridCells.some(cell => cell.value === value)) {
-        console.log(value + " already in subgrid");
-        return false;
+    for (let cell of subgridCells) {
+        if (Number(cell.value) === value) {
+            return false;
+        }
     }
 
     return true;

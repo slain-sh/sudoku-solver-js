@@ -8,6 +8,7 @@ table {
   width: 0px;
 }
 
+
 td {
   height: 40px;
   width: 40px;
@@ -29,7 +30,7 @@ td > input[type="text"], td {
 input[type="text"] {
   border-radius: 0px;
   text-align: center;
-  font-size: 1.8em;
+  font-size: 1.6em;
 }
 
 td:first-child {

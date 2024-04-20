@@ -20,9 +20,10 @@
 <body>
   <main class="container">
     <div class="row middle-xs">
-      <div class="col-md col-lg">
+      <div class="col-md col-lg-6">
         <div class="box">
           <h1>Sudoku Solver</h1>
+
           <p>
             This is a simple sudoku solver that implements a 
             <a href="https://en.wikipedia.org/wiki/Sudoku_solving_algorithms">
@@ -36,7 +37,7 @@
                 dosoku api</a> 
           </p>
           <div class="row middle-xs">
-            <div class="col">
+            <div class="col-xs">
               <!-- <div role="group"> -->
               <div>
                 <button onclick="generateBoard()" data-tooltip="Randomly generate a new board">
@@ -50,15 +51,18 @@
           </div>
         </div>
       </div>
-      <div class="col-md-6 col-lg-6">
+      <div class="col-md-6 col-lg-4">
         <div class="box">
           <table id="gui"></table>
+          <small>You can also edit the board btw, just make sure you input valid clues.</small>
+          <small>Generating and solving may take a few seconds.</small>
         </div>
       </div>
     </div>
 
   </main>
   <footer class="container">
+    <hr/>
     <div class="row middle-xs">
       <div class="col-xs">
         <span>
@@ -66,7 +70,7 @@
           //
           <a href="https://fushigi.netlify.app">My site</a>
         </span>
-      </d>
+      </div>
   </footer>
 </body>
 

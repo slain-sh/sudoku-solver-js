@@ -93,6 +93,27 @@ function loadBoard() {
     // }
 }
 
+async function generateBoard() {
+    try {
+        clearBoard();
+        const response = await fetch('https://sudoku-api.vercel.app/api/dosuku?query={newboard(limit:1){grids{value}}}');
+        const data = await response.json();
+        
+        const grid = (data.newboard.grids[0].value);
+        grid.map(function(v, i) {
+            v.map(function(e, j) {
+                if (e !== 0) {
+                    let input = cells[i][j]
+                    input.value = e;
+                    input.unassigned = false;
+                }
+            });
+        });
+    } catch (error) {
+        console.error('Error:', error);
+    }
+}
+
 function setUnassigned(input) {
     // Check if input value is empty
     if (input.value.trim() === "" || input.value.trim() == 0) {
@@ -268,4 +289,3 @@ function clearBoard() {
 
 renderBoard();
 console.log(cells);
-// solveBoard(cells);

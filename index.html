@@ -5,74 +5,16 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="light dark" />
-  <!-- pico CSS -->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css" /> -->
+  <!-- CSS -->
   <link rel="stylesheet" href="css/pico.min.css">
-  <!-- Flexbox -->
+  <link rel="stylesheet" href="css/custom.css">
+  <!-- Flexbox Grid -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flexboxgrid/6.3.1/flexboxgrid.min.css"
     type="text/css">
   <!-- Main script -->
   <script src="main.js" defer></script>
   <title>Sudoku Solver</title>
-  <style>
-    :root {
-      /* --pico-spacing: 0px; */
-      /* --pico-form-element-spacing-vertical: 0.5rem; */
-      --pico-form-element-spacing-horizontal: 0.5rem;
-    }
-    table {
-      margin: 1em auto;
-      width: 0px;
-    }
-
-    td {
-      height: 40px;
-      width: 40px;
-      border: 1px solid;
-      text-align: center;
-      border-color: #8891A4;
-      margin: 0px;
-      padding: 0px;
-    }
-
-    td > input[type="text"], td {
-      /* all: unset; */
-      margin: 0px;
-      padding: 0px;
-      width: 50px;
-      height: 50px;
-    }
-
-    input[type="text"] {
-      border-radius: 0px;
-      text-align: center;
-      font-size: 1.8em;
-    }
-
-    td:first-child {
-      border-left: solid;
-      border-color: #8891A4;
-    }
-
-    td:nth-child(3n) {
-      border-right: solid;
-      border-color: #8891A4;
-    }
-
-    tr:first-child {
-      border-top: solid;
-      border-color: #8891A4;
-    }
-
-    tr:nth-child(3n) td {
-      border-bottom: solid;
-      border-color: #8891A4;
-    }
-    /* h1 {
-      margin-top: 2rem;
-    } */
-  </style>
-</head>
+  </head>
 
 <body>
   <main class="container">
@@ -81,26 +23,50 @@
         <div class="box">
           <h1>Sudoku Solver</h1>
           <p>
-            This is a simple sudoku solver that implements a backtracking algorithm
-            using JavaScript. The frontend is made with HTML tables, Pico CSS, and
-            Flexbox Grid.
+            This is a simple sudoku solver that implements a 
+            <a href="https://en.wikipedia.org/wiki/Sudoku_solving_algorithms">
+              backtracking algorithm</a>  
+            using JavaScript.
           </p>
-          <span>
-            <!-- <button onclick="loadBoard()">Load</button> -->
-            <button onclick="generateBoard()">Generate</button>
-            <button onclick="solveBoard(cells)">Solve</button>
-            <button onclick="clearBoard()">Clear</button>
-          </span>
+          <p>
+              The frontend is made with HTML tables, Pico CSS, and
+              Flexbox Grid. Boards are fetched using 
+              <a href="https://sudoku-api.vercel.app/">
+                dosoku api</a> 
+          </p>
+          <div class="row middle-xs">
+            <div class="col">
+              <!-- <div role="group"> -->
+              <div>
+                <button onclick="generateBoard()" data-tooltip="Randomly generate a new board">
+                  Generate</button>
+                <button onclick="solveBoard(cells)" data-tooltip="Solve current board">
+                  Solve</button>
+                <button onclick="clearBoard()" data-tooltip="Wipes the board">
+                  Clear</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="col-md-8 col-lg-6">
+      <div class="col-md-6 col-lg-6">
         <div class="box">
-          <table id="gui">
-          </table>
+          <table id="gui"></table>
         </div>
       </div>
     </div>
+
   </main>
+  <footer class="container">
+    <div class="row middle-xs">
+      <div class="col-xs">
+        <span>
+          View on <a href="https://github.com/Zakar98k/sudoku-solver-js">GitHub</a>
+          //
+          <a href="https://fushigi.netlify.app">My site</a>
+        </span>
+      </d>
+  </footer>
 </body>
 
 </html>

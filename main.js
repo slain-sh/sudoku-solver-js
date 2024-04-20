@@ -3,96 +3,6 @@
 // Array with all cells 0-80
 let cells = [];
 
-function loadBoard() {
-    clearBoard();
-    let sudoku1 =  [[0,0,0,2,6,0,7,0,1],
-                    [6,8,0,0,7,0,0,9,0],
-                    [1,9,0,0,0,4,5,0,0],
-                    [8,2,0,1,0,0,0,4,0],
-                    [0,0,4,6,0,2,9,0,0],
-                    [0,5,0,0,0,3,0,2,8],
-                    [0,0,9,3,0,0,0,7,4],
-                    [0,4,0,0,5,0,0,3,6],
-                    [7,0,3,0,1,8,0,0,0]
-    ];
-    
-    let sudoku2 = [
-        [5, 3, 0, 0, 7, 0, 0, 0, 0],
-        [6, 0, 0, 1, 9, 5, 0, 0, 0],
-        [0, 9, 8, 0, 0, 0, 0, 6, 0],
-        [8, 0, 0, 0, 6, 0, 0, 0, 3],
-        [4, 0, 0, 8, 0, 3, 0, 0, 1],
-        [7, 0, 0, 0, 2, 0, 0, 0, 6],
-        [0, 6, 0, 0, 0, 0, 2, 8, 0],
-        [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9]
-    ];
-    
-    let sudoku3 = [
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 3, 0, 8, 5],
-        [0, 0, 1, 0, 2, 0, 0, 0, 0],
-        [0, 0, 0, 5, 0, 7, 0, 0, 0],
-        [0, 0, 4, 0, 0, 0, 1, 0, 0],
-        [0, 9, 0, 0, 0, 0, 0, 0, 0],
-        [5, 0, 0, 0, 0, 0, 0, 7, 3],
-        [0, 0, 2, 0, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 4, 0, 0, 0, 9]
-    ];
-
-    let sudoku4 = [
-        [8, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 3, 6, 0, 0, 0, 0, 0],
-        [0, 7, 0, 0, 9, 0, 2, 0, 0],
-        [0, 5, 0, 0, 0, 7, 0, 0, 0],
-        [0, 0, 0, 0, 4, 5, 7, 0, 0],
-        [0, 0, 0, 1, 0, 0, 0, 3, 0],
-        [0, 0, 1, 0, 0, 0, 0, 6, 8],
-        [0, 0, 8, 5, 0, 0, 0, 1, 0],
-        [0, 9, 0, 0, 0, 0, 4, 0, 0]
-      ];
-      
-
-    // Generate a random number between 1 and 3 (inclusive)
-    let randomNumber = Math.floor(Math.random() * 4) + 1;
-    let randomBoard;
-
-    // Switch statement based on the random number
-    switch (randomNumber) {
-    case 1:
-        randomBoard = sudoku1
-        break;
-    case 2:
-        randomBoard = sudoku2
-        break;
-    case 3:
-        randomBoard = sudoku3
-        break;
-    case 4:
-        randomBoard = sudoku4
-        break;
-    }
-
-    randomBoard.map(function(v, i, a) {
-        // console.log(v);
-        v.map(function(e, j, a) {
-            if (e !== 0) {
-                let input = cells[i][j]
-                input.value = e;
-                input.unassigned = false;
-            }
-        });
-    });
-
-    // randomBoard = [].concat(...randomBoard);
-
-    // for (let i = 0; i < randomBoard.length; i++) {
-    //     if (randomBoard[i] != 0) {
-    //         cells[i].firstElementChild.value = randomBoard[i];
-    //     }
-    // }
-}
-
 async function generateBoard() {
     try {
         clearBoard();
@@ -114,6 +24,7 @@ async function generateBoard() {
     }
 }
 
+
 function setUnassigned(input) {
     // Check if input value is empty
     if (input.value.trim() === "" || input.value.trim() == 0) {
@@ -122,6 +33,7 @@ function setUnassigned(input) {
         input.unassigned = false;
     }
 }
+
 
 function validate(event) {
     // Allow tab, arrow keys, and backspace
@@ -135,6 +47,7 @@ function validate(event) {
   // Prevent default action for all other keys
   event.preventDefault();
 }
+
 
 function renderBoard() {
     const table = document.getElementById("gui");
@@ -165,6 +78,7 @@ function renderBoard() {
         table.appendChild(row);
     }
 }
+
 
 function getSquareNumber(row, column) {
     // offset column and row by 1, so they don't start at 0
@@ -197,15 +111,16 @@ function getSquareNumber(row, column) {
     } 
 }
 
+/** !!! The actual recursive function !!! **/
 function solveBoard(grid, r = 0, c = 0) {
-    // Base case: We've solved the board!
     if (r === 9) {
+        // Base case: We've solved the board!
         return true;
-    // We've hit the end of the column, move to next row
     } else if (c === 9) {
+        // We've hit the end of the column, move to next row
         return solveBoard(grid, r+1, 0);
     } else if (grid[r][c].unassigned === false) {
-        // console.log("Next column")
+        // We've hit column already assigned, move to next col
         return solveBoard(grid, r, c+1);
     } else {
         for (let v = 1; v < 10; v++) {
@@ -215,42 +130,17 @@ function solveBoard(grid, r = 0, c = 0) {
                 if (solveBoard(grid, r, c+1) === true) {
                     return true;
                 }
-                // console.log("Override with empty");
+                // Unset the value if next solve (c+1) backtracks
                 grid[r][c].value = "";
             }
         }
+        // Numbers 1-9 are exhausted: return false and backtrack
         return false;
     }
 }
 
 
 function isValid(grid, r, c, value) {
-    // let valid = false;
-    // let notInRow = !grid[r].some(input => Number(input.value) === value);
-    // let notInColumn = !Array.from({ length: 9 }, (_, i) => grid[i][c]).some(input => Number(input.value) === value)
-
-    // let currentSquare = getSquareNumber(r, c);
-    // let subgridCells = [].concat(...grid).filter(input => input.square === currentSquare);
-    // // console.log(subgridCells);
-    // let notInSubgrid = !subgridCells.some(cell => cell.square === value);
-
-    // if (notInRow && notInColumn && notInSubgrid) { valid = true}
-
-    // return valid;
-
-    // if (Array.from(grid[r]).map(input => Number(input.value)).includes(value)) {
-    //     return false;
-    // } 
-    // console.log(grid.map(row => row[c]).map(input => Number(input.value)));
-    // if (grid.map(row => row[c]).map(input => Number(input.value)).includes(value)) {
-    //     return false;
-    // }
-
-    // let currentSquare = getSquareNumber(r, c);
-    // let subgridCells = [].concat(...grid).filter(input => input.square === currentSquare);
-    // if (subgridCells.some(cell => cell.square === value)) {
-    //     return false;
-    // }
     for (let i = 0; i < grid[r].length; i++) {
         if (Number(grid[r][i].value) === value && i != c) {
             console.log(value + " already in row");
@@ -274,18 +164,15 @@ function isValid(grid, r, c, value) {
     return true;
 }
 
+
 function clearBoard() {
     for (let r = 0; r < cells.length; r++) {
         for (let c = 0; c < cells[r].length; c++) {
             let input = cells[r][c];
             input.value = "";
             input.unassigned = true;
-            // console.log(cells[r][c]);
         }
     }
 }
 
-
-
 renderBoard();
-console.log(cells);

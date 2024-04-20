@@ -126,6 +126,7 @@ function solveBoard(grid, r = 0, c = 0) {
         for (let v = 1; v < 10; v++) {
             if (isValid(grid, r, c, v)) {
                 console.log(v + " is valid")
+                grid[r][c].classList.add("pico-color-azure-400");
                 grid[r][c].value = String(v);
                 if (solveBoard(grid, r, c+1) === true) {
                     return true;
@@ -170,6 +171,7 @@ function clearBoard() {
         for (let c = 0; c < cells[r].length; c++) {
             let input = cells[r][c];
             input.value = "";
+            input.classList.remove("pico-color-azure-400");
             input.unassigned = true;
         }
     }

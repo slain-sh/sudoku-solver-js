@@ -1,10 +1,11 @@
 :root {
   /* --pico-spacing: 0px; */
-  /* --pico-form-element-spacing-vertical: 0.5rem; */
+  --pico-form-element-spacing-vertical: 0.5rem;
   --pico-form-element-spacing-horizontal: 0.5rem;
 }
 table {
-  margin: 1em auto;
+  margin-top: var(--pico-spacing);
+  margin-bottom: var(--pico-spacing);
   width: 0px;
 }
 

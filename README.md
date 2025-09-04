@@ -1,7 +1,7 @@
 # Sudoku Solver JS
 ## Showcase: https://youtu.be/qXVeqdareEA
 - Video showcase: https://youtu.be/qXVeqdareEA
-- View the site: https://zakar98k.github.io/sudoku-solver-js/
+- View the site: https://slain-sh.github.io/sudoku-solver-js/
 
 ## Project description:
 
